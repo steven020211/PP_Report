@@ -4,14 +4,14 @@
 using namespace std;
 
 void adjust_brightness(unsigned char* data, int width, int height, float brightness) {
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            int index = (i * width + j) * 3;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int index = (y * width + x) * 3;
             
-            for (int k = 0; k < 3; k++) {
-                int val = data[index + k] + brightness * 255;
+            for (int i = 0; i < 3; i++) {
+                int val = data[index + i] + brightness * 255;
                 val = max(0, min(val, 255));
-                data[index + k] = val;
+                data[index + i] = val;
             }
         }
     }
@@ -23,25 +23,12 @@ void adjust_contrast(unsigned char* data, int width, int height, float contrast)
     float f = (259.0f * (c + 255.0f)) / (255.0f * (259.0f - c));
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            int i = (y * width + x) * 3;
-            float r = data[i];
-            float g = data[i+1];
-            float b = data[i+2];
-
-            r = f * (r - 128.0f) + 128.0f;
-            g = f * (g - 128.0f) + 128.0f;
-            b = f * (b - 128.0f) + 128.0f;
-
-            if (r < 0.0f) r = 0.0f;
-            if (r > 255.0f) r = 255.0f;
-            if (g < 0.0f) g = 0.0f;
-            if (g > 255.0f) g = 255.0f;
-            if (b < 0.0f) b = 0.0f;
-            if (b > 255.0f) b = 255.0f;
-
-            data[i] = (unsigned char)r;
-            data[i+1] = (unsigned char)g;
-            data[i+2] = (unsigned char)b;
+            int index = (y * width + x) * 3;
+            for (int i = 0; i < 3; i++) {
+                int val = f * data[index + i] + 128.0f;
+                val = max(0, min(val, 255));
+                data[index + i] = val;
+            }
         }
     }
 }

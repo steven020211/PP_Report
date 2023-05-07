@@ -2,4 +2,6 @@
 .vscode
 image_adjustment
 *.bmp
- 
+perf.data
+!sample_5184×3456.bmp
+build/Debug
