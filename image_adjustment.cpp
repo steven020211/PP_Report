@@ -113,44 +113,51 @@ void hsv2rgb(float h, float s, float v, float& r, float& g, float& b) {
 }
 
 void adjust_hue(unsigned char* data, int width, int height, float hue) {
-    for (int i = 0; i < width * height; i++) {
-        float r = data[3*i+0] / 255.0f;
-        float g = data[3*i+1] / 255.0f;
-        float b = data[3*i+2] / 255.0f;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int index = (y * width + x) * 3;
+            float r = data[index + 0];
+            float g = data[index + 1];
+            float b = data[index + 2];
 
-        float h, s, v;
-        rgb2hsv(r, g, b, h, s, v);
+            float h, s, v;
+            rgb2hsv(r, g, b, h, s, v);
 
-        h += hue;
-        if (h < 0.0f) h += 360.0f;
-        if (h >= 360.0f) h -= 360.0f;
+            h += hue;
 
-        hsv2rgb(h, s, v, r, g, b);
+            if (h < 0.0f) h += 360.0f;
+            if (h >= 360.0f) h -= 360.0f;
 
-        data[3*i+0] = static_cast<unsigned char>(r * 255.0f);
-        data[3*i+1] = static_cast<unsigned char>(g * 255.0f);
-        data[3*i+2] = static_cast<unsigned char>(b * 255.0f);
+            hsv2rgb(h, s, v, r, g, b);
+
+            data[index + 0] = static_cast<unsigned char>(r);
+            data[index + 1] = static_cast<unsigned char>(g);
+            data[index + 2] = static_cast<unsigned char>(b);
+
+        }
     }
 }
-
 void adjust_saturation(unsigned char* data, int width, int height, float saturation) {
     saturation = min(max(saturation, -1.0f), 1.0f);
-    float ratio = (saturation < 0.0f) ? (saturation + 1.0f) : saturation * 2.0f;
-    float h, s, v;
-    float r, g, b;
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            int offset = i * width * 3 + j * 3;
-            r = data[offset];
-            g = data[offset + 1];
-            b = data[offset + 2];
+    float ratio = (saturation <= 0.0f) ? (saturation + 1.0f) : saturation * 2.0f;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int index = (y * width + x) * 3;
+            float r = data[index];
+            float g = data[index + 1];
+            float b = data[index + 2];
+
+            float h, s, v;
             rgb2hsv(r, g, b, h, s, v);
+
             s *= ratio;
             s = min(max(s, 0.0f), 1.0f);
+
             hsv2rgb(h, s, v, r, g, b);
-            data[offset] = static_cast<unsigned char>(r);
-            data[offset + 1] = static_cast<unsigned char>(g);
-            data[offset + 2] = static_cast<unsigned char>(b);
+
+            data[index] = static_cast<unsigned char>(r);
+            data[index + 1] = static_cast<unsigned char>(g);
+            data[index + 2] = static_cast<unsigned char>(b);
         }
     }
 }
