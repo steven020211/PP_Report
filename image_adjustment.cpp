@@ -139,14 +139,11 @@ void adjust_hue(unsigned char* data, int width, int height, float hue) {
 }
 void adjust_saturation(unsigned char* data, int width, int height, float saturation) {
     saturation = min(max(saturation, -1.0f), 1.0f);
-    float ratio = (saturation <= 0.0f) ? (saturation + 1.0f) : saturation * 2.0f;
+    float ratio = saturation + 1.0f;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int index = (y * width + x) * 3;
-            float r = data[index];
-            float g = data[index + 1];
-            float b = data[index + 2];
-
+            float r = data[index],g = data[index + 1],b = data[index + 2];
             float h, s, v;
             rgb2hsv(r, g, b, h, s, v);
 
