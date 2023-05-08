@@ -25,7 +25,7 @@ void adjust_contrast(unsigned char* data, int width, int height, float contrast)
         for (int x = 0; x < width; x++) {
             int index = (y * width + x) * 3;
             for (int i = 0; i < 3; i++) {
-                int val = f * data[index + i] + 128.0f;
+                int val = f * (data[index + i] - 128.0f) + 128.0f;
                 val = max(0, min(val, 255));
                 data[index + i] = val;
             }
