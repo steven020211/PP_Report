@@ -4,12 +4,14 @@
 using namespace std;
 
 void adjust_brightness(unsigned char* data, int width, int height, float brightness) {
+    float b = brightness * 255;
+
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int index = (y * width + x) * 3;
             
             for (int i = 0; i < 3; i++) {
-                int val = data[index + i] + brightness * 255;
+                int val = data[index + i] + b;
                 val = max(0, min(val, 255));
                 data[index + i] = val;
             }
@@ -19,7 +21,7 @@ void adjust_brightness(unsigned char* data, int width, int height, float brightn
 
 
 void adjust_contrast(unsigned char* data, int width, int height, float contrast) {
-    auto c = contrast * 255.0f;
+    float c = contrast * 255.0f;
     float f = (259.0f * (c + 255.0f)) / (255.0f * (259.0f - c));
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
@@ -113,6 +115,7 @@ void hsv2rgb(float h, float s, float v, float& r, float& g, float& b) {
 }
 
 void adjust_hue(unsigned char* data, int width, int height, float hue) {
+    float a = hue;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int index = (y * width + x) * 3;
@@ -123,7 +126,7 @@ void adjust_hue(unsigned char* data, int width, int height, float hue) {
             float h, s, v;
             rgb2hsv(r, g, b, h, s, v);
 
-            h += hue;
+            h += a;
 
             if (h < 0.0f) h += 360.0f;
             if (h >= 360.0f) h -= 360.0f;
