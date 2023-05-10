@@ -1,7 +1,7 @@
 *.o 
 .vscode
-image_adjustment
+image_adjustment*
 *.bmp
 perf.data
-!sample_5184×3456.bmp
+!sample_*.bmp
 build/Debug

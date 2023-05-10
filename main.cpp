@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <chrono>
 #include "image_adjustment.h"
+#include "image_attributes.h"
 #include "bitmap.h"
 
 using namespace std;
@@ -26,10 +27,10 @@ const int CON_MAX = 1;
 
 int main(int argc, char* argv[]) {
     // Default values for image adjustments
-    optional<float> hue {};
-    optional<float> saturation {};
-    optional<float> brightness {};
-    optional<float> contrast {};
+    optional<float> hue  =  0.0f;
+    optional<float> saturation  =  0.0f;
+    optional<float> brightness =  0.0f;
+    optional<float> contrast =  0.0f;
 
     // Define the command line options
     static struct option long_options[] = {
@@ -95,33 +96,40 @@ int main(int argc, char* argv[]) {
     int width = bitmap->Width();
     int height = bitmap->Height();
 
+    image_attributes attr;
+    attr.set_brightness(brightness.value());
+    attr.set_contrast(contrast.value());
+    attr.set_saturation(saturation.value());
+    attr.set_hue(hue.value());
+
     auto start = high_resolution_clock::now();
     // Adjust the image attributes
     
-    if(hue)
-    {
-        if(!isValid("hue", hue.value(), HUE_MIN, HUE_MAX)) return 1;
-        cout << "adjusting hue to " << hue.value() << endl;
-        adjust_hue(data, width, height, hue.value());
-    }
-    if(saturation)
-    {
-        if(!isValid("saturation", saturation.value(), SAT_MIN, SAT_MAX)) return 1;
-        cout << "adjusting saturation" << endl;
-        adjust_saturation(data, width, height, saturation.value());
-    }
-    if(brightness)
-    {
-        if(!isValid("brightness", brightness.value(), BRI_MIN, BRI_MAX)) return 1;
-        cout << "adjusting brightness" << endl;
-        adjust_brightness(data, width, height, brightness.value());
-    }
-    if(contrast)
-    {
-        if(!isValid("contrast", contrast.value(), CON_MIN, CON_MAX)) return 1;
-        cout << "adjusting contrast" << endl;
-        adjust_contrast(data, width, height, contrast.value());
-    }
+    adjust_attributes(data, width, height, attr);
+    // if(hue)
+    // {
+    //     if(!isValid("hue", hue.value(), HUE_MIN, HUE_MAX)) return 1;
+    //     cout << "adjusting hue to " << hue.value() << endl;
+    //     adjust_hue(data, width, height, hue.value());
+    // }
+    // if(saturation)
+    // {
+    //     if(!isValid("saturation", saturation.value(), SAT_MIN, SAT_MAX)) return 1;
+    //     cout << "adjusting saturation" << endl;
+    //     adjust_saturation(data, width, height, saturation.value());
+    // }
+    // if(brightness)
+    // {
+    //     if(!isValid("brightness", brightness.value(), BRI_MIN, BRI_MAX)) return 1;
+    //     cout << "adjusting brightness" << endl;
+    //     adjust_brightness(data, width, height, brightness.value());
+    // }
+    // if(contrast)
+    // {
+    //     if(!isValid("contrast", contrast.value(), CON_MIN, CON_MAX)) return 1;
+    //     cout << "adjusting contrast" << endl;
+    //     adjust_contrast(data, width, height, contrast.value());
+    // }
 
     auto stop = high_resolution_clock::now();  // Stop measuring execution time
     auto duration = duration_cast<milliseconds>(stop - start);
