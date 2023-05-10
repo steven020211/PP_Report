@@ -3,5 +3,5 @@
 image_adjustment*
 *.bmp
 perf.data
-!sample_*.bmp
-build/Debug
+build/
+
