@@ -42,7 +42,7 @@ $(TARGET_SERIAL): $(OBJ_SERIAL)
 	CFLAGS2=
 
 $(TARGET_PTHREAD): $(OBJ_PTHERAD)
-	$(CC) $^ -o $@
+	$(CC) $^ -pthread -o $@
 
 $(TARGET_OPENMP): $(OBJ_OPENMP)
 	$(CC) -fopenmp $^ -o $@
