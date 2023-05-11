@@ -27,10 +27,10 @@ const int CON_MAX = 1;
 
 int main(int argc, char* argv[]) {
     // Default values for image adjustments
-    optional<float> hue  =  0.0f;
-    optional<float> saturation  =  0.0f;
-    optional<float> brightness =  0.0f;
-    optional<float> contrast =  0.0f;
+    float hue  =  0.0f;
+    float saturation  =  0.0f;
+    float brightness =  0.0f;
+    float contrast =  0.0f;
 
     // Define the command line options
     static struct option long_options[] = {
@@ -97,10 +97,10 @@ int main(int argc, char* argv[]) {
     int height = bitmap->Height();
 
     image_attributes attr;
-    attr.set_brightness(brightness.value());
-    attr.set_contrast(contrast.value());
-    attr.set_saturation(saturation.value());
-    attr.set_hue(hue.value());
+    attr.set_brightness(brightness);
+    attr.set_contrast(contrast);
+    attr.set_saturation(saturation);
+    attr.set_hue(hue);
 
     auto start = high_resolution_clock::now();
 
