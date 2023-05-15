@@ -1,8 +1,14 @@
 #pragma once
 
+#define DEF_B 0.0f
+#define DEF_F 1.0f
+#define DEF_R 1.0f
+#define DEF_A 0.0f
+
 class  image_attributes
 {
 public:
+
     float brightness;
     float contrast;
     float saturation;
@@ -22,10 +28,10 @@ public:
         contrast{0.0f},
         saturation{0.0f},
         hue{0.0f},
-        b{0.0f},
-        f{1.0f},
-        r{1.0f},
-        a{0.0f}
+        b{DEF_B},
+        f{DEF_F},
+        r{DEF_R},
+        a{DEF_A}
     {};
 
     void set_brightness(float value) { b = (brightness = value) * 255; };
@@ -37,4 +43,9 @@ public:
     };
     void set_saturation(float value) { r = (saturation = value) + 1.0f; };
     void set_hue(float value) { a = hue = value; };
+
+    bool adjust_brightness() { return b != DEF_B; };
+    bool adjust_contrast() { return f != DEF_F; };
+    bool adjust_saturation() { return r != DEF_R; };
+    bool adjust_hue() { return a != DEF_A; };
 };
